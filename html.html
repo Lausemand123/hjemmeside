@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  <h1>Find ledig lokation</h1>
+  <p>Ledig lokation: <span id="randomCell"></span></p>
+
+  <button onclick="generateRandomCell()" disabled>Generer ledig lokation</button>
+
+  <script>
+    var csvData;
+
+    function getRandomCellFromCSV() {
+      var allRows = csvData.split(/\r?\n|\r/);
+      var randomRow = allRows[Math.floor(Math.random() * allRows.length)];
+      var cells = randomRow.split(',');
+      var randomCell = cells[Math.floor(Math.random() * cells.length)];
+      document.getElementById('randomCell').textContent = randomCell;
+    }
+
+    function generateRandomCell() {
+      getRandomCellFromCSV();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var csvFilePath = 'lokation1.csv';
+
+      fetch(csvFilePath)
+        .then(function(response) {
+          return response.text();
+        })
+        .then(function(data) {
+          csvData = data;
+          document.querySelector('button').removeAttribute('disabled');
+        })
+        .catch(function(error) {
+          console.error('Fejl ved indlæsning af CSV-fil:', error);
+        });
+    });
+  </script>
+</body>
+</html>
